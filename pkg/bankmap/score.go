@@ -16,7 +16,8 @@ func CalculateScore(bi *BankInfo) {
 	if err != nil {
 		log.Error(dis)
 	}
-	dP := (1 - dis) / 1 * 0.55
+	dtk := float64(Distance / 1000)
+	dP := (dtk - dis) / dtk * 0.55
 	// priority aspect
 	pP := 0.5 * 0.35
 	for _, cB := range CountryBankList {

@@ -7,7 +7,7 @@ changeCause: "add: first version"
 
 # Basic info
 Chart:
-  releasename: bankmap # Your release name, your chart's name
+  releasename: banklocator # Your release name, your chart's name
   maintainers:
     email: zhangsiming@360.com # Your email
     name: ZhangSiming # Your name
@@ -65,8 +65,12 @@ readinessProbe: {}
 
 # Setting the container's environment variables
 env:
-- name: "TZ"
-  value: "Asia/Shanghai"
+- name: "KEYWORD"
+  value: ""
+- name: "DISTANCE"
+  value: ""
+- name: "AMAPKEY"
+  value: ""
 
 # Exposing services
 service:

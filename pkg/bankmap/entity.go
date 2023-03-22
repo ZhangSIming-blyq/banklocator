@@ -5,8 +5,6 @@ import "banklocator/pkg/logger"
 // AmapAPIURL 高德地图 API URL
 const AmapAPIURL = "https://restapi.amap.com/v3/place/around"
 
-const AmapAPIKey = "b87b49eab52a5769a8973a7e7b98afaa"
-
 var log = logger.DefaultLog
 
 // PlaceResult 地点查询结果

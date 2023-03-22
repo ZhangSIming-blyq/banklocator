@@ -6,6 +6,7 @@ import (
 	"io"
 	"math"
 	"net/http"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -16,13 +17,35 @@ var (
 	Lock              = sync.Mutex{}
 	ExportId          = 1
 	ExportBankInfoMap = map[int][]BankInfo{}
+	KeyWord           string
+	Distance          int
+	AmapAPIKey        string
 )
 
-// TODO: achieve this
 func init() {
-	// keyword
-	// distance
-	// ampkey
+	// KeyWord, default to 银行, try to enter categorical words, such as 学校，餐厅，游乐园
+	KeyWord = os.Getenv("KEYWORD")
+	if len(KeyWord) == 0 {
+		KeyWord = "银行"
+	}
+
+	// Distance, the search radius for the given coordinates, default 1000, unit is "meter"
+	DistanceS := os.Getenv("DISTANCE")
+	if len(DistanceS) == 0 {
+		Distance = 1000
+	} else {
+		Dist, err := strconv.Atoi(DistanceS)
+		if err != nil {
+			panic("Error in parsing Distance")
+		}
+		Distance = Dist
+	}
+	// AmapKey, apikey of Amap developer platform, default ""
+	AmapAPIKey = os.Getenv("AMAPKEY")
+	if len(AmapAPIKey) == 0 {
+		AmapAPIKey = ""
+		panic("Amapkey must set!")
+	}
 }
 
 // GetNearByBank 获取附近的银行信息，并返回渲染html
@@ -44,7 +67,7 @@ func GetNearByBank(name string) []BankInfo {
 	}
 
 	// 3. get all bank which is located within 5000m range
-	bankList := GetBankList(poiList[0].Location, 1000)
+	bankList := GetBankList(poiList[0].Location, Distance)
 	for i, bank := range bankList {
 		bankList[i].Tel = GetTelDetail(bank.ID)
 		CalculateScore(&bankList[i])
@@ -97,7 +120,7 @@ func GetBankList(lo string, radius int) []BankInfo {
 	RstCount := 0
 	ct := 1
 
-	url := fmt.Sprintf("%s?keywords=银行&location=%.6f,%.6f&radius=%d&output=json&key=%s&page=%d", AmapAPIURL, latf, lngf, radius, AmapAPIKey, 1)
+	url := fmt.Sprintf("%s?keywords=%s&location=%.6f,%.6f&radius=%d&output=json&key=%s&page=%d", AmapAPIURL, KeyWord, latf, lngf, radius, AmapAPIKey, 1)
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Error(err)
@@ -141,7 +164,7 @@ func GetBankList(lo string, radius int) []BankInfo {
 	}
 
 	for ct = 2; ct < tc; ct++ {
-		url = fmt.Sprintf("%s?keywords=银行&location=%.6f,%.6f&radius=%d&output=json&key=%s&page=%d", AmapAPIURL, latf, lngf, radius, AmapAPIKey, ct)
+		url = fmt.Sprintf("%s?keywords=%s&location=%.6f,%.6f&radius=%d&output=json&key=%s&page=%d", AmapAPIURL, KeyWord, latf, lngf, radius, AmapAPIKey, ct)
 		resp, err := http.Get(url)
 		if err != nil {
 			log.Error(err)

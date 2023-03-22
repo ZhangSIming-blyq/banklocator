@@ -5,6 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ce26b09-555c-48a5-b0c7-16a2060837ce" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/BankLocator.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmd/static/background.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmd/static/huji.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmd/templates/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cmd/templates/result.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/chart/Chart.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/chart/templates/NOTES.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/chart/templates/_helpers.tpl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/chart/templates/configmap.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/chart/templates/deployment.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/chart/templates/hpa.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/chart/templates/ingress.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/chart/templates/pdb.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/chart/templates/pvc.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/chart/templates/service.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/chart/values.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/bankmap/bankmap.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/bankmap/bankmap_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/bankmap/entity.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/bankmap/getdetail.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/bankmap/getlocation.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/bankmap/score.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/bankmap/score_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/gin/middleware/auth.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/gin/middleware/exportcsv.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/gin/router/router.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/logger/logger.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -13,28 +48,62 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="GOROOT" url="file:///usr/local/go" />
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="2NMajmnrK0U0GnSXbCkt5ajzGzr" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "go.import.settings.migrated": "true",
-    "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "/Users/simingzhang",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/simingzhang&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
+  <component name="RunManager">
+    <configuration name="go build banklocator/cmd" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="BankLocator" />
+      <working_directory value="$PROJECT_DIR$/cmd" />
+      <envs>
+        <env name="AMAPKEY" value="b87b49eab52a5769a8973a7e7b98afaa" />
+        <env name="DISTANCE" value="1000" />
+        <env name="KEYWORD" value="学校" />
+      </envs>
+      <EXTENSION ID="net.ashald.envfile">
+        <option name="IS_ENABLED" value="false" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+        </ENTRIES>
+      </EXTENSION>
+      <kind value="PACKAGE" />
+      <package value="banklocator/cmd" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/cmd/main.go" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build banklocator/cmd" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
