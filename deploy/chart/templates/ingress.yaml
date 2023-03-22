@@ -1,0 +1,29 @@
+{{- if .Values.ingress.enabled -}}
+{{- $ingressPaths := .Values.ingress.paths -}}
+{{- $servicePort := .Values.ingress.servicePort -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "release-name" . }}
+  namespace: {{ include "namespace" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "release-name" . }}
+    release: {{ include "release-name" . }}
+{{- with .Values.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  rules:
+  {{- range .Values.ingress.hosts }}
+    - host: {{ . | quote }}
+      http:
+        paths:
+        {{- range $ingressPaths }}
+          - path: {{ . }}
+            backend:
+              serviceName: {{ include "release-name" $ }}
+              servicePort: {{ $servicePort }}
+        {{- end }}
+  {{- end }}
+{{- end }}

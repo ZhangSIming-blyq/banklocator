@@ -1,0 +1,14 @@
+{{- if .Values.configmap.enabled -}}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "release-name" . }}
+  namespace: {{ include "namespace" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "release-name" . }}
+    release: {{ include "release-name" . }}
+data:
+  {{- with .Values.configmap.content }}
+{{ toYaml . | indent 2 }}
+  {{- end }}  
+{{- end }}

@@ -1,0 +1,21 @@
+{{- if .Values.pdb.enabled }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "release-name" . }}
+  namespace : {{ include "namespace" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "release-name" . }}
+    release: {{ include "release-name" . }}
+spec:
+  {{- if .Values.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
+  {{- end }}
+  {{- if .Values.pdb.minAvailable }}
+  minAvailable: {{ .Values.pdb.minAvailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "release-name" . }}
+      release: {{ include "release-name" . }}
+{{- end }}

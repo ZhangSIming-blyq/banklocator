@@ -1,0 +1,143 @@
+# Default prod values.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Every time you modify the values, you need to modify the changeCause to indicate the reason for the change
+changeCause: "add: first version"
+
+# Basic info
+Chart:
+  releasename: bankmap # Your release name, your chart's name
+  maintainers:
+    email: zhangsiming@360.com # Your email
+    name: ZhangSiming # Your name
+
+minReadySeconds: 0 # The time from the program's liveness health to service availability, generally set to 0
+progressDeadlineSeconds: 120 # How long the deployment stuck in a failed state it would be considered a failure
+revisionHistoryLimit: 7
+replicas: 1 # Number of desired pods, increase or decrease the number of pods as needed
+
+# Use strategy to configure rolling updates
+strategy:
+  type: "RollingUpdate" # RollingUpdate, Recreate
+  maxSurge: 1 # 1, 5, 10,  30%, 50%... The number of pods that can be created above the desired amount of pods during an update
+  maxUnavailable: 0 # 1, 5, 10,  30%, 50%... The number of pods that can be unavailable during the update process
+
+pod:
+  terminationGracePeriodSeconds: 30 # The time of pods exit gracefully
+  imagePullSecrets: "" # docker registry account
+  annotations: {}
+#   prometheus.io/scrape: "true"
+#   prometheus.io/port: "your metric port"
+
+nodeSelector: {} # Use nodeSelector for scheduling a pod to a special node
+# environment: "production"
+
+tolerations: {} # Use tolerations to tolerate some existing taints
+# - key: "environment"
+#   operator: "Equal"
+#   value: "production"
+#   effect: "NoSchedule"
+
+# Image of your program
+image:
+  repository: "localimage/bankmap" # do not add '/' to the end
+  pullPolicy: IfNotPresent # IfNotPresent, Always
+  command: [] # replace entrypoint in image, for example: command: ["echo"]
+  args: [] # arguments for entrypoint, for example: args: ["arg1", "arg2"]
+
+kubeInit:
+  enabled: false
+  image: ""
+  pullPolicy: IfNotPresent
+  command: []  # replace entrypoint in image, for example: command: ["echo"]
+  args: [""] # arguments for entrypoint, for example: args: ["arg1", "arg2"]
+
+# If the liveness probe fails, the container will be restarted
+livenessProbe: {}
+# tcpSocket example
+# readinessProbe:
+#   tcpSocket:
+#     port: 8080
+
+# If the readiness Probe fails, the container will be marked as unready
+readinessProbe: {}
+
+# Setting the container's environment variables
+env:
+- name: "TZ"
+  value: "Asia/Shanghai"
+
+# Exposing services
+service:
+  enabled: true
+  isHeadLess: false # Whether it is a headless service, used for DNS-based service discovery. Only effective in ClusterIP mode
+  type: NodePort # ClusterIP, NodePort
+  externalTrafficPolicy: Local # Local, Cluster. Only for type is NodePort
+
+# Multi-ports need to follow the same format, continue to configure, see the example below
+ports:
+  app: # Will be used as the name of the service(default "app"), just named as your application name
+    port: 30080 # The port exposed on the ClusterIP. Users in the cluster use <cluster ip>: <port> to access the service.
+    targetPort: 30080 # The port exposed on the pod, should be same as 'containerPort'(EXPOSED port in Dockerfile)
+    nodePort: 30080 # The port exposed on the host machine, users outside the cluster use <host ip>: <nodePort> to access the service
+    protocol: TCP
+# portname2:
+#   port: 8080 # The port exposed on the ClusterIP. Users in the cluster use <cluster ip>: <port> to access the service.
+#   targetPort: 8080 # The port exposed on the pod, should be same as 'containerPort'(EXPOSED port in Dockerfile)
+#   nodePort: 8080 # The port exposed on the host machine, users outside the cluster use <host ip>: <nodePort> to access the service
+#   protocol: TCP
+
+# Set the domain name
+ingress:
+  enabled: false # Set to false if external network access is not required
+  annotations:
+    kubernetes.io/ingress.class: traefik-internal
+  # traefik.ingress.kubernetes.io/app-root: your root uri
+  paths: ["/"] # Access path
+  hosts:
+    - example.shannonai.com # Domain name
+  servicePort: 8080 # Should be the same as '.Values.service.port'
+  tls: []
+
+# Resource limits for instances
+# After the chart is released, according to the actual resource occupation displayed in grafana, modify the resource request/limit in time to avoid resource wasting
+resources: # {}
+  limits:
+    cpu: "500m" # CPU limit, such as 100m, 500m, 1, 2, ...
+    memory: "500Mi" # MEM limit, such as 50Mi, 1Gi
+    # ephemeral-storage: "2Gi" # Disk limit(almost for temporary storage and log), such as 50Mi, 1Gi
+  requests:
+    cpu: "100m" # 100m, 500m, 1, 2, ...
+    memory: "100Mi"
+    # ephemeral-storage: "1Gi"
+
+volumeMounts: {}
+
+volumes: {}
+
+pvc:
+  enabled: false # If you use an existing PVC, you can set it to false and modify the volumes above.
+  storageClass: "" 
+  accessMode: ReadWriteOnce # ReadWriteOnce, ReadOnlyMany, ReadWriteMany. The accessModes of PV and PVC must be the same
+  size: 8Gi
+
+pdb: # PodDisruptionBudget, used for pod active eviction protection, note that after pdb is determined, it cannot be updated
+  enabled: false
+  maxUnavailable: 1 # MaxUnavailable and minAvailable cannot be used at the same time. Values: 1, 30%, etc.
+  minAvailable: ""
+
+# The Horizontal Pod Autoscaler automatically scales the number of pods to avoid CPU/MEM utilization over 100%(request) when having a heavy pressusre
+# The min replica number is 1 and max number is 5
+# Set "hpa.enabled=true" to enable
+hpa:
+  enabled: false
+  minReplicas: 1 # Maximum and minimum number of replicas when scaling out
+  maxReplicas: 5 
+
+# Program's config file
+configmap:
+  enabled: false
+  content: |
+    # 'example-conf.yaml' is a example name for your configfile, you can change it to whatever you want.
+    # The content of your config file needs to be fully pasted under the config file name, and two more spaces are required for indentation; If more config files are needed, please write in a similar format below

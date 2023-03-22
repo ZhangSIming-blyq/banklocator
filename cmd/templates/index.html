@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUJI SEARCH PLATFORM</title>
+    <style>
+        /* Add a CSS reset to remove any default styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Set a background image */
+        body {
+            background-image: url('/public/background.jpeg');
+            background-position: center center;
+            background-size: cover;
+            background-attachment: fixed; /* This property keeps the background image in place as the content scrolls */
+            background-repeat: no-repeat; /* This property prevents the background image from repeating */
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.4;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        /* Style the search form */
+        .search-form {
+            margin-top: 0px;
+        }
+
+        /* Style the input field */
+        .search-input {
+            width: 100%;
+            max-width: 600px;
+            height: 60px;
+            padding: 0 20px;
+            border: none;
+            border-radius: 30px;
+            background-color: rgba(255, 255, 255, 0.8);
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Lower background image opacity when input is focused */
+        .search-input:focus {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Style the search button */
+        .search-button {
+            width: 150px;
+            height: 60px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 30px;
+            background-color: #338fed;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .search-button:hover {
+            background-color: #1f6db2;
+        }
+
+        .search-input:focus::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(224, 8, 8, 0.4); /* semi-transparent black */
+            z-index: -1; /* move the overlay behind other elements */
+        }
+
+        /* Set a max-width for the page */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Style the return and export icons */
+        .icon {
+            width: 64px;
+            height: 64px;
+            display: inline-block;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .icon-return {
+            background-image: url('/public/return-icon.png');
+        }
+
+        .icon-export {
+            background-image: url('/public/export-icon.png');
+        }
+
+        /* Style the result output */
+        .result {
+            margin-top: 50px;
+            text-align: left;
+            padding: 20px;
+            background-color: rgba(171, 162, 162, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .result h2 {
+            margin-bottom: 10px;
+        }
+
+        .result p {
+            margin-bottom: 20px;
+        }
+
+        /* Style the footer */
+        .footer {
+            margin-top: 50px;
+            font-size: 14px;
+            color: rgb(213, 203, 203);
+        }
+
+        .footer a {
+            text-decoration: none;
+            color: rgb(213, 203, 203);
+        }
+
+        .footer a:hover {
+            color: #333;
+            text-decoration: underline;
+        }
+
+        .result {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: rgba(39, 110, 110, 0.8);
+        }
+
+        .highlight {
+            background-color: rgba(255, 204, 0, 0.64);
+        }
+
+        .bank-img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            display: inline-block;
+            vertical-align: middle;
+            background-image: url('https://example.com/bank-image.png');
+            background-size: cover;
+        }
+
+        .bank-title {
+            display: inline-block;
+            vertical-align: middle;
+            font-weight: bold;
+        }
+
+        .recommend {
+            animation: recommend 1s infinite alternate;
+        }
+
+        @keyframes recommend {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-10px);
+            }
+        }
+
+        #export {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        #export:hover {
+            background-color: #3e8e41;
+        }
+
+        /* For screens smaller than 600px */
+        @media (max-width: 600px) {
+            .logo {
+                max-width: 200%;
+                margin: auto
+                margin-top: 200px;
+            }
+
+            .logo img {
+                max-width: 350px;
+            }
+
+            .search-form {
+                margin-top: 50px;
+            }
+            .search-input {
+                height: 40px;
+                font-size: 16px;
+            }
+            .search-button {
+                height: 40px;
+                font-size: 16px;
+            }
+            .result {
+                margin-top: 30px;
+                font-size: 14px;
+                padding: 10px;
+            }
+            table {
+                font-size: 12px;
+            }
+        }
+
+        /* For screens between 600px and 1000px */
+        @media (min-width: 600px) and (max-width: 1000px) {
+            .logo {
+                margin: auto;
+                max-width: 200%;
+                margin-top: 200px;
+            }
+
+            .logo img {
+                max-width: 450px;
+            }
+        }
+
+        /* For screens larger than 1000px */
+        @media (min-width: 1000px) {
+            .logo {
+                margin: auto;
+                max-width: 200%;
+                margin-top: 200px;
+            }
+
+            .logo img {
+                max-width: 600px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="logo">
+        <img src="/public/huji.jpg" alt="HUJI">
+    </div>
+    <input class="search-input" type="text" id="name" name="name" placeholder="What's your name?">
+    <button class="search-button" type="submit" onclick="checkInput()">Login</button>
+    <div class="footer">
+        <p>© 2023 Huji Search Platform - <a href="#">About</a> - <a href="#">Privacy</a> - <a href="#">Terms</a></p>
+    </div>
+</div>
+
+<script>
+    function checkInput() {
+        var input = document.getElementById("name").value;
+        if (input === "huji") {
+            window.location.href = "/app/submit?auth=zhangsiminghahahaha";
+        } else if (input === "虎季") {
+            window.location.href = "/app/submit?auth=zhangsiminghahahaha";
+        } else if (input === "虎季女朋友") {
+            window.location.href = "/app/submit?auth=zhangsiminghahahaha";
+        } else if (input === "陈子涵") {
+            window.location.href = "/app/submit?auth=zhangsiminghahahaha";
+        } else {
+            alert("输入错误，你的手机已被定位，高启盛正在拿着冻鱼赶来");
+            window.location.href = "/";
+        }
+    }
+</script>
+
+</body>
+</html>

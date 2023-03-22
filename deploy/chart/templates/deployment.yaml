@@ -1,0 +1,122 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "release-name" . }}
+  namespace: {{ include "namespace" . }}
+  annotations:
+    kubernetes.io/change-cause: {{ quote .Values.changeCause }}
+  labels:
+    app.kubernetes.io/name: {{ include "release-name" . }}
+    release: {{ include "release-name" . }}
+spec:
+  minReadySeconds: {{ .Values.minReadySeconds }}
+  progressDeadlineSeconds: {{ .Values.progressDeadlineSeconds }}
+  revisionHistoryLimit:  {{ .Values.revisionHistoryLimit }}
+  strategy:
+    type: {{ .Values.strategy.type }}
+    {{- if eq .Values.strategy.type "RollingUpdate" }}
+    rollingUpdate:
+      maxSurge: {{ .Values.strategy.maxSurge }}
+      maxUnavailable: {{ .Values.strategy.maxUnavailable }}
+    {{- end }}
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "release-name" . }}
+      release: {{ include "release-name" . }}
+  template:
+    metadata:
+      name: {{ include "release-name" . }}
+      labels:
+        app.kubernetes.io/name: {{ include "release-name" . }}
+        release: {{ include "release-name" . }}
+      annotations:
+        checksum/config: '{{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}'
+        {{- with .Values.pod.annotations }}
+{{ toYaml . | indent 8 }}
+        {{- end }}
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - {{ include "release-name" . }}
+                - key: release
+                  operator: In
+                  values:
+                  - {{ include "release-name" . }}
+              topologyKey: kubernetes.io/hostname
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.pod.terminationGracePeriodSeconds }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.pod.imagePullSecrets }}
+      {{- end }}
+      containers:
+      - name: {{ include "release-name" . }}
+        image: {{ .Values.image.repository }}:{{ .Chart.AppVersion }}
+        {{- with .Values.image.command }}
+        command: ["{{ join `", "` . }}"]
+        {{- end }}
+        {{- with .Values.image.args }}
+        args: ["{{ join `", "` . }}"]
+        {{- end }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        {{- range $name, $config := .Values.ports }}
+        - name: {{ $name | quote }}
+          containerPort: {{ $config.targetPort }}
+          protocol: TCP
+        {{- end }}
+        {{ with .Values.livenessProbe -}}
+        livenessProbe:
+{{ toYaml . | indent 10 }}
+        {{- end }}
+        {{ with .Values.readinessProbe -}}
+        readinessProbe:
+{{ toYaml . | indent 10 }}
+        {{- end }}
+        {{ with .Values.resources -}}
+        resources:
+{{ toYaml . | indent 10 }}
+        {{- end }}
+        {{ with .Values.env -}}
+        env:
+{{ toYaml . | indent 8 }}
+        {{- end }}
+        volumeMounts:
+        {{- with .Values.volumeMounts }}
+{{ toYaml . | indent 8 }}
+        {{- end }}
+{{- if .Values.kubeInit.enabled }}
+      initContainers:
+      - name: init-container
+        image: {{ .Values.kubeInit.image }}
+        imagePullPolicy: {{ .Values.kubeInit.pullPolicy }}
+        {{- with .Values.kubeInit.command }}
+        command: ["{{ join `", "` . }}"]
+        {{- end }}
+        {{- with .Values.kubeInit.args }}
+        args: ["{{ join `", "` . }}"]
+        {{- end }}
+        {{- with .Values.volumeMounts }}
+{{ toYaml . | indent 8 }}
+        {{- end }}
+{{- end }}
+      volumes:
+      {{- with .Values.volumes }}
+{{ toYaml . | indent 6 }}
+      {{- end }}
