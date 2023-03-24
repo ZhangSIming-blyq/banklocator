@@ -5,3 +5,5 @@ docker-build:
 	docker build -f deploy/Dockerfile . -t ${IMG}
 docker-save:
 	docker save ${IMG} > deploy/imagefile
+docker-push:
+	docker push ${IMG}
