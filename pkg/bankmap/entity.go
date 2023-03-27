@@ -2,12 +2,12 @@ package bankmap
 
 import "banklocator/pkg/logger"
 
-// AmapAPIURL 高德地图 API URL
+// AmapAPIURL Amap's API URL
 const AmapAPIURL = "https://restapi.amap.com/v3/place/around"
 
 var log = logger.DefaultLog
 
-// PlaceResult 地点查询结果
+// PlaceResult the result of location query
 type PlaceResult struct {
 	Status  string        `json:"status"`
 	Info    string        `json:"info"`
@@ -15,7 +15,7 @@ type PlaceResult struct {
 	PoiList []AmapPOIInfo `json:"pois"`
 }
 
-// AmapPOIInfo 高德地图 POI 信息
+// AmapPOIInfo Amap's POI info
 type AmapPOIInfo struct {
 	ID       string `json:"id"`
 	Name     string `json:"name"`
@@ -23,7 +23,7 @@ type AmapPOIInfo struct {
 	Distance string `json:"distance"`
 }
 
-// BankInfo 银行信息
+// BankInfo the info of bank
 type BankInfo struct {
 	ID       string `json:"id"`
 	Name     string `json:"name"`
