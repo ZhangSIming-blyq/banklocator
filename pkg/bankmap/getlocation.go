@@ -7,24 +7,23 @@ import (
 	"net/http"
 )
 
-// Address 地址结构体
 type Address struct {
 	Latitude  float64 `json:"lat"` // 纬度
 	Longitude float64 `json:"lng"` // 经度
 }
 
-// RegeocodeResult 逆地理编码结果结构体
+// RegeocodeResult inverse geocoding result structure
 type RegeocodeResult struct {
 	AddressComponent struct {
-		Province string `json:"province"` // 省份
-		City     string `json:"city"`     // 城市
-		District string `json:"district"` // 区县
-		Street   string `json:"street"`   // 街道名称
+		Province string `json:"province"`
+		City     string `json:"city"`
+		District string `json:"district"`
+		Street   string `json:"street"`
 	} `json:"addressComponent"`
-	Location Address `json:"location"` // 地理位置
+	Location Address `json:"location"`
 }
 
-// GetLocation 调用高德地图逆地理编码 API 获取指定地点的经纬度坐标
+// GetLocation call the inverse geocoding API of  Amap to get the latitude and longitude coordinates of the specified location
 func GetLocation(address string) (float64, float64) {
 	resp, err := http.Get(fmt.Sprintf("https://restapi.amap.com/v3/geocode/geo?key=%s&address=%s", AmapAPIKey, address))
 	if err != nil {
@@ -38,7 +37,7 @@ func GetLocation(address string) (float64, float64) {
 	var result struct {
 		Status   string `json:"status"`
 		Geocodes []struct {
-			Location string `json:"location"` // 经纬度坐标
+			Location string `json:"location"`
 		} `json:"geocodes"`
 	}
 	err = json.Unmarshal(body, &result)
@@ -51,7 +50,7 @@ func GetLocation(address string) (float64, float64) {
 		return 0, 0
 	}
 	if len(result.Geocodes) > 0 {
-		// 解析经纬度坐标
+		// resolve latitude and longitude coordinates
 		loc := result.Geocodes[0].Location
 		var lat, lng float64
 		fmt.Sscanf(loc, "%f,%f", &lng, &lat)
@@ -62,9 +61,8 @@ func GetLocation(address string) (float64, float64) {
 	return 0, 0
 }
 
-// GenFormatLocation 格式化经纬度输出，经度,维度
+// GenFormatLocation formatted latitude and longitude output, longitude,dimension
 func GenFormatLocation(lo string) string {
-	// 查询北京市海淀区上地十街10号的经纬度坐标
 	lat, lng := GetLocation(lo)
 	if lat == 0 && lng == 0 {
 		return "get empty result"

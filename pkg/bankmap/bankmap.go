@@ -48,7 +48,7 @@ func init() {
 	}
 }
 
-// GetNearByBank 获取附近的银行信息，并返回渲染html
+// GetNearByBank get information about nearby banks and return rendered html
 func GetNearByBank(name string) []BankInfo {
 	var totalMsg SearchResult
 	// 1. get latitude and longitude for the address you provided, result count is 1, return 0,0 if met some error
@@ -80,7 +80,7 @@ func GetNearByBank(name string) []BankInfo {
 	return bankList
 }
 
-// GetPOIList 获取指定地点最近的 POI 列表
+// GetPOIList get a list of the nearest POIs for a given location
 func GetPOIList(placeName string, radius int, lo string) ([]AmapPOIInfo, error) {
 	resp, err := http.Get(fmt.Sprintf("%s?location=%s&radius=%d&output=json&key=%s", AmapAPIURL, lo, radius, AmapAPIKey))
 	if err != nil {
@@ -102,7 +102,7 @@ func GetPOIList(placeName string, radius int, lo string) ([]AmapPOIInfo, error) 
 	return result.PoiList, nil
 }
 
-// GetBankList 获取指定地点最近的银行列表
+// GetBankList get a list of the nearest banks in a given location
 func GetBankList(lo string, radius int) []BankInfo {
 	losp := strings.Split(lo, ",")
 	lat := losp[1]
@@ -200,7 +200,7 @@ func GetBankList(lo string, radius int) []BankInfo {
 	return bankList
 }
 
-// distance 计算两个地理位置之间的距离，单位为千米
+// distance calculate the distance between two geographical locations in kilometers
 func distance(lat1, lng1 float64, poiLo string) float64 {
 	poiLoSp := strings.Split(poiLo, ",")
 	lat2 := poiLoSp[1]
@@ -222,7 +222,7 @@ func distance(lat1, lng1 float64, poiLo string) float64 {
 	return s
 }
 
-// rad 将角度转化为弧度
+// rad converting angles to radians
 func rad(d float64) float64 {
 	return d * math.Pi / 180.0
 }

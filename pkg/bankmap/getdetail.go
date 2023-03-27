@@ -9,7 +9,7 @@ import (
 	"reflect"
 )
 
-// GetTelDetail 根据Poi的id，获取电话信息
+// GetTelDetail get tel detail from poi info
 func GetTelDetail(id string) string {
 	output := "json"
 
@@ -38,7 +38,7 @@ func GetTelDetail(id string) string {
 		log.Error(err)
 	}
 
-	// 获取商家电话
+	// get merchant tel
 	tel := ""
 	if len(rspnse.Poi) != 0 {
 		for i := range rspnse.Poi {
